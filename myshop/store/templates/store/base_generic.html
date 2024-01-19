@@ -1,0 +1,68 @@
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Apteka++{% endblock %}</title>
+    <!-- Добавляем ссылку на Bootstrap CSS (можно использовать CDN) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Навигационное меню с использованием Bootstrap -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            Apteka++
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto"> <!-- Используем mr-auto для выравнивания влево на мобильных устройствах -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0 mx-auto"> <!-- Используем mx-auto для центрирования -->
+                <div class="input-group">
+                    <input class="form-control rounded-pill" type="text" name="q" placeholder="Поиск товаров" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success rounded-pill" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <span class="navbar-text">
+                FAQ или что-то еще
+            </span>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Левое меню -->
+        <div class="col-md-3" id="left-menu">
+            {% block left_menu %}{% endblock %}
+        </div>
+
+        <!-- Основной контент -->
+        <div class="col-md-9">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+<!-- Добавляем скрипты Bootstrap JS (можно использовать CDN) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
