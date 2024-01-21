@@ -1,0 +1,67 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<!-- Подключаем библиотеку jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Подключаем ваш обновленный код cart.js -->
+<script src="{% static 'js/cart.js' %}"></script>
+
+<!-- Подключаем ваш script.js -->
+<script src="{% static 'js/script.js' %}"></script>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1>Корзина</h1>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for item in cart_items %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="cart-item-details">
+                       
+                        <div class="card-header" style="background-color: white;">
+                            {% if item.product.img %}
+                                <img class="rounded mx-auto d-block product-img" src="{{ item.product.img }}" width="100" height="100">
+                                <h5 class="cart-item-name">{{ item.product.name }}</h5>
+                            {% else %}
+                                <img class="rounded mx-auto d-block product-img" src="{% static 'img\image.jpg' %}" width="100" height="100">
+                                <h5 class="cart-item-name">{{ item.product.name }}</h5>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <form action="/increase-cart-item/{{ item.product.id }}/" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-success" type="submit">+</button>
+                        </form>
+                        <span class="item-quantity mx-2">{{ item.quantity }}</span>
+                        <form action="/decrease-cart-item/{{ item.product.id }}/" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-outline-danger" type="submit">-</button>
+                        </form>
+                    </div>
+                    <div class="cart-item-price" data-price="{{ item.product.price }}">
+                        Цена:{{ item.product.price }} тенге
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="card-footer text-muted d-flex justify-content-between">
+            <form action="/remove-from-cart/{{ item.product.id }}/" method="post">
+                {% csrf_token %}
+                
+                <a class="btn btn-success" href="#">Checkout</a>
+                <button class="btn btn-danger" type="submit">Remove</button>
+                <a class="btn btn-primary" href="{% url 'store:product_list'%}">Continue Shopping</a>
+            </form>
+            <div class="cart-item-total">
+                <span>В итоге: {{ total_price }}тенге</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,32 @@
+msgid "Signup"
+msgstr "Регистрация"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+msgstr "Обязательно. 150 символов или меньше. Только буквы, цифры и символы @/./+/-/_."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Your password can’t be too similar to your other personal information."
+msgstr "Ваш пароль не должен быть слишком похож на другую вашу личную информацию."
+
+msgid "Your password must contain at least 8 characters."
+msgstr "Ваш пароль должен содержать как минимум 8 символов."
+
+msgid "Your password can’t be a commonly used password."
+msgstr "Ваш пароль не должен быть общеупотребимым."
+
+msgid "Your password can’t be entirely numeric."
+msgstr "Ваш пароль не должен состоять полностью из цифр."
+
+msgid "Password confirmation"
+msgstr "Подтверждение пароля"
+
+msgid "Enter the same password as before, for verification."
+msgstr "Введите тот же пароль, что и раньше, для проверки."
+
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
