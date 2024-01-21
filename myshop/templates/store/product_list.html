@@ -99,6 +99,7 @@
                                     <img class="rounded mx-auto d-block product-img" src="{% static 'img\image.jpg' %}" width="200" height="200">
                                 {% endif %}
                             </div>
+                            
                             <div class="card-body product-card">
                                 <h4 class="my-0 fw-normal">{{ product.name }}</h4>
                                 <h2 class="card-title pricing-card-name">{{ product.price }} т</h2>
@@ -106,8 +107,9 @@
                                     <h4>Осталось {{ product.total }} шт</h4>
                                 {% endif %}
                                 <a href="{% url 'store:product_detail' product.id %}" class="w-100 btn btn-lg btn-outline-primary">Подробнее</a>
-                                <a href="{% url 'store:add-to-cart' product.id %}" class="w-100 btn btn-lg btn-outline-primary add-to-cart-button">Add to Cart</a>
+                                <a href="{% url 'store:add-to-cart' product.id %}" class="w-100 btn btn-lg btn-outline-primary">Купить</a>
                             </div>
+                            
                         </div>
                     </div>
                 {% endfor %}
