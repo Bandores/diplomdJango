@@ -1,0 +1,34 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block content %}
+{% for created_at, products_count in grouped_orders.items %}
+    <div class="container">
+        
+        {% for product, count in products_count %}
+            <div class="card mb-3 rounded shadow-sm">
+                <div class="card-header">
+                    <strong>Дата заказа: {{ created_at }}</strong>
+                   
+                </div>
+                <div class="card-body">
+                    <h2>{{ product.name }}</h2>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {% if product.img %}
+                                <img src="{{ product.img }}" alt="{{ product.name }}" class="img-thumbnail" width="100" height="100">
+                            {% else %}
+                                <img src="{% static 'img/image.jpg' %}" alt="No Image" class="img-thumbnail" width="100" height="100">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10">
+                            <p>Доставка в: {{ product.store_purchases.first.city }}</p>
+                            <p>Цена: {{ product.price }}</p>
+                            <p>Количество: {{ count }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+{% endblock %}

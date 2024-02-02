@@ -11,7 +11,7 @@ def user_signup(request):
         form = CustomSignupForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('store:index')
+            return redirect('store:product_list')
     else:
         form = CustomSignupForm()
     return render(request, 'users/register.html', {'form': form})
@@ -26,7 +26,7 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)    
-                return redirect('store:index')
+                return redirect('store:product_list')
     else:
         form = LoginForm()
     return render(request, 'users/login.html', {'form': form})

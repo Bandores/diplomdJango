@@ -28,8 +28,9 @@ def product_list(request):
     
     if query:
         # Используем Q-объекты для поиска в нескольких полях модели
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    
+        products = products.filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query)
+        )
     # Остальная часть вашей функции остается неизменной
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     
@@ -32,3 +33,11 @@ class Cart(models.Model):
         return f"Cart for {self.user.username}"
 
 User.cart = property(lambda u: Cart.objects.get_or_create(user=u)[0])
+
+class Purchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='store_purchases')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='store_purchases')
+    full_name = models.CharField(max_length=100, verbose_name='ФИО')
+    city = models.CharField(max_length=100, verbose_name='Город')
+    phone = models.CharField(max_length=15, verbose_name='Телефон')
+    created_at = models.DateTimeField(auto_now_add=True)
