@@ -59,9 +59,27 @@
 {% block content %}
     <main class="container">
         {{ block.super }}
+        <div class="mb-3">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-3">
+                <div class="container-fluid">
+                    
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav" style="gap: 5px;">
+                            {% for category in category %}
+                            <li class="nav-item mb-2 " >
+                                <a class="nav-link btn btn-primary  rounded-pill text-white" href="{% url 'store:product_list' %}?category={{ category.id }}">{{ category.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
         <div class="container  p-3 shadow">
             <form method="GET" action="{% url 'store:product_list' %}" id="filter-form">
+                <h4>Фильтр по цене</h4>
                 <div class="mb-3 row">
+                    
                     <label for="min-price" class="col-sm-2 col-form-label">От:</label>
                     <div class="col-sm-4">
                         <input type="number" id="min-price" name="min_price" class="form-control">
@@ -72,15 +90,7 @@
                     </div>
                 </div>
         
-                <div class="mb-3">
-                    <label for="category-dropdown" class="form-label">Категория товаров:</label>
-                    <select class="form-select" id="category-dropdown" name="category">
-                        <option value="" selected>Выберите категорию</option>
-                        {% for category in category %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                
         
                 <button type="submit" class="btn btn-primary">Применить фильтр</button>
             </form>
