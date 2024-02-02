@@ -53,41 +53,42 @@
         }
     </style>
 {% endblock %}
-{% block left_menu %}
-<div class="container sticky-top p-3 shadow">
-    <form method="GET" action="{% url 'store:product_list' %}" id="filter-form">
-        <div class="mb-3 row">
-            <label for="min-price" class="col-sm-2 col-form-label">От:</label>
-            <div class="col-sm-4">
-                <input type="number" id="min-price" name="min_price" class="form-control">
-            </div>
-            <label for="max-price" class="col-sm-1 col-form-label">до:</label>
-            <div class="col-sm-4">
-                <input type="number" id="max-price" name="max_price" class="form-control">
-            </div>
-        </div>
 
-        <div class="mb-3">
-            <label for="category-dropdown" class="form-label">Категория товаров:</label>
-            <select class="form-select" id="category-dropdown" name="category">
-                <option value="" selected>Выберите категорию</option>
-                {% for category in category %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
 
-        <button type="submit" class="btn btn-primary">Применить фильтр</button>
-    </form>
-</div>
-{% endblock %}
+
 {% block content %}
     <main class="container">
         {{ block.super }}
+        <div class="container  p-3 shadow">
+            <form method="GET" action="{% url 'store:product_list' %}" id="filter-form">
+                <div class="mb-3 row">
+                    <label for="min-price" class="col-sm-2 col-form-label">От:</label>
+                    <div class="col-sm-4">
+                        <input type="number" id="min-price" name="min_price" class="form-control">
+                    </div>
+                    <label for="max-price" class="col-sm-1 col-form-label">до:</label>
+                    <div class="col-sm-4">
+                        <input type="number" id="max-price" name="max_price" class="form-control">
+                    </div>
+                </div>
+        
+                <div class="mb-3">
+                    <label for="category-dropdown" class="form-label">Категория товаров:</label>
+                    <select class="form-select" id="category-dropdown" name="category">
+                        <option value="" selected>Выберите категорию</option>
+                        {% for category in category %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+        
+                <button type="submit" class="btn btn-primary">Применить фильтр</button>
+            </form>
+        </div>
         <!-- Добавим форму поиска -->
         
         <h1 class="mt-3">Каталог товаров</h1>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2">
             {% if products %}
                 {% for product in products %}
                     <div class="col mb-4">

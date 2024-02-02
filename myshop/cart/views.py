@@ -34,47 +34,31 @@ def buy_single_product(request, product_id):
             phone = form.cleaned_data['phone']
 
             if cart_item.quantity > 0:
-                with transaction.atomic():
-                    # Уменьшаем количество продукта (total) на количество, которое покупается
-                    product.total -= cart_item.quantity
-                    product.save()
+                if product.total > 0:
+                    with transaction.atomic():
+                        product.total -= 1
+                        product.save()
 
-                    # Создаем заказ
-                    Purchase.objects.create(user=request.user, product=product, full_name=full_name, city=city, phone=phone)
+                        Purchase.objects.create(user=request.user, product=product, full_name=full_name, city=city, phone=phone)
 
-                    # Уменьшаем количество товара в корзине
-                    cart_item.quantity -= 1
-                    cart_item.save()
+                        cart_item.quantity -= 1
+                        cart_item.save()
 
-                messages.success(request, 'Продукт успешно куплен!')
+                    messages.success(request, 'Продукт успешно куплен!')
+                    return redirect('store:cart')
+                else:
+                    messages.error(request, 'Извините, этот товар закончился на складе!')
             else:
-                messages.error(request, 'Продукт закончился на складе!')
-
-            return redirect('store:cart')
+                messages.error(request, 'Продукт закончился в вашей корзине!')
+        
     else:
         form = OrderForm()
 
-    return render(request, 'store/order_form.html', {'form': form})
-@login_required(login_url='users:login')
-def user_orders(request):
-    # Получаем все заказы текущего пользователя
-    orders = Purchase.objects.filter(user=request.user).order_by('created_at')
-    
-    # Создаем словарь, где ключами будут даты создания заказов,
-    # а значениями будут списки заказов, сделанных в эту дату
-    grouped_orders = {}
-    for order in orders:
-        created_at = order.created_at.date()
-        if created_at not in grouped_orders:
-            grouped_orders[created_at] = []
-        grouped_orders[created_at].append(order)
+    # Check if the product is out of stock
+    product = Product.objects.get(pk=product_id)
+    out_of_stock = product.total <= 0
 
-    # Обработка повторяющихся продуктов
-    for created_at, orders in grouped_orders.items():
-        product_counter = Counter(order.product for order in orders)
-        grouped_orders[created_at] = [(product, count) for product, count in product_counter.items()]
-
-    return render(request, 'store/user_orders.html', {'grouped_orders': grouped_orders})
+    return render(request, 'store/order_form.html', {'form': form, 'out_of_stock': out_of_stock})
 @login_required(login_url='users:login')
 def buy_all_products(request):
     if request.method == 'POST':
@@ -86,28 +70,36 @@ def buy_all_products(request):
             full_name = form.cleaned_data['full_name']
             city = form.cleaned_data['city']
             phone = form.cleaned_data['phone']
+            insufficient_products = []
 
             with transaction.atomic():
                 for cart_item in cart_items:
-                    if cart_item.quantity > 0:
-                        product = cart_item.product
+                    product = cart_item.product
+                    if product.total >= cart_item.quantity:
                         product.total -= cart_item.quantity
                         product.save()
 
                         for _ in range(cart_item.quantity):
-                            # Создаем заказ для каждого товара в корзине
                             Purchase.objects.create(user=request.user, product=product, full_name=full_name, city=city, phone=phone)
 
                         cart_item.quantity = 0
                         cart_item.save()
+                    else:
+                        insufficient_products.append(product.name)
 
-                messages.success(request, 'Все продукты успешно куплены!')
+                if insufficient_products:
+                    # Если есть товары, которых не хватило, формируем сообщение об ошибке
+                    error_message = f'Недостаточно товаров в наличии для: {", ".join(insufficient_products)}'
+                    messages.error(request, error_message)
+                else:
+                    messages.success(request, 'Все продукты успешно куплены!')
 
-            return redirect('store:cart')
+            return render(request, 'store/order_form.html', {'form': form, 'insufficient_products': insufficient_products})
     else:
         form = OrderForm()
 
     return render(request, 'store/order_form.html', {'form': form})
+
 @require_POST
 @login_required(login_url='/users/login/')
 def add_to_cart(request, product_id):
@@ -184,3 +176,24 @@ def get_cart_count(request):
     else:
         cart_count = 0
     return cart_count
+
+@login_required(login_url='users:login')
+def user_orders(request):
+    # Получаем все заказы текущего пользователя
+    orders = Purchase.objects.filter(user=request.user).order_by('created_at')
+    
+    # Создаем словарь, где ключами будут даты создания заказов,
+    # а значениями будут списки заказов, сделанных в эту дату
+    grouped_orders = {}
+    for order in orders:
+        created_at = order.created_at.date()
+        if created_at not in grouped_orders:
+            grouped_orders[created_at] = []
+        grouped_orders[created_at].append(order)
+
+    # Обработка повторяющихся продуктов
+    for created_at, orders in grouped_orders.items():
+        product_counter = Counter(order.product for order in orders)
+        grouped_orders[created_at] = [(product, count) for product, count in product_counter.items()]
+
+    return render(request, 'store/user_orders.html', {'grouped_orders': grouped_orders})

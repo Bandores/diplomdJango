@@ -64,13 +64,14 @@
             <form action="/buy_all_products/{{ item.product.id }}" method="post">
                 {% csrf_token %}
                 <button class="btn btn-success" type="submit">Купить все</button>
-                <a class="btn btn-primary" href="{% url 'store:product_list'%}">Continue Shopping</a>
+                <a class="btn btn-primary" href="{% url 'store:product_list'%}">Вернуться назад</a>
             </form>
             <div class="cart-item-total">
                 <span>В итоге: {{ total_price }}тенге</span>
             </div>
         </div>
     </div>
+    
 </div>
 <script src="{% static 'js/cart.js' %}"></script>
 {% endblock %}
