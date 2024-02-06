@@ -28,14 +28,14 @@ def product_list(request):
     query = unquote(request.GET.get('q', ''))
     
     if query:
-    # Выполняем поиск с учетом как верхнего, так и нижнего регистра по полям name, description и category
+    # Выполняем поиск с использованием регулярного выражения без учета регистра по полям name, description и category
         products = Product.objects.filter(
-        Q(name__icontains=query) |
-        Q(description__icontains=query) |
-        Q(category__name__icontains=query)
+        Q(name__iregex=query) |
+        Q(description__iregex=query) |
+        Q(category__name__iregex=query)
     )
     else:
-     products = Product.objects.all()
+        products = Product.objects.all()
     
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
