@@ -8,8 +8,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from urllib.parse import unquote
+
+
 
 def index(request):
     return render(request, 'store/index.html')
@@ -24,19 +24,14 @@ def product_detail(request, product_id):
 def product_list(request):
     products = Product.objects.all()
     category = Category.objects.all()
-    
-    query = unquote(request.GET.get('q', ''))
+    query = request.GET.get('q')
     
     if query:
-    # Выполняем поиск с учетом как верхнего, так и нижнего регистра по полям name, description и category
-        products = Product.objects.filter(
-        Q(name__icontains=query) |
-        Q(description__icontains=query) |
-        Q(category__name__icontains=query)
-    )
-    else:
-     products = Product.objects.all()
-    
+        # Используем Q-объекты для поиска в нескольких полях модели
+        products = products.filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query)
+        )
+    # Остальная часть вашей функции остается неизменной
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     category_id = request.GET.get('category')
@@ -47,17 +42,6 @@ def product_list(request):
         products = products.filter(price__lte=max_price)
     if category_id:
         products = products.filter(category_id=category_id)
-    
-    paginator = Paginator(products, 12)  # Показываем 12 товаров на странице
-    page_number = request.GET.get('page')
-    try:
-        products = paginator.page(page_number)
-    except PageNotAnInteger:
-        # Если параметр страницы не является целым числом, показываем первую страницу
-        products = paginator.page(1)
-    except EmptyPage:
-        # Если номер страницы находится за пределами допустимых страниц, показываем последнюю страницу
-        products = paginator.page(paginator.num_pages)
     
     # Остальной код
 

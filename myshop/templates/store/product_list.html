@@ -127,23 +127,7 @@
                 </ul>
             {% endif %}
         </div>
-        <div class="pagination">
-            <span class="step-links">
-                {% if products.has_previous %}
-                    <a href="?page=1">&laquo; первая</a>
-                    <a href="?page={{ products.previous_page_number }}">предыдущая</a>
-                {% endif %}
         
-                <span class="current">
-                    Страница {{ products.number }} из {{ products.paginator.num_pages }}.
-                </span>
-        
-                {% if products.has_next %}
-                    <a href="?page={{ products.next_page_number }}">следующая</a>
-                    <a href="?page={{ products.paginator.num_pages }}">последняя &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
     </main>
 {% endblock %}
 {% block scripts %}
