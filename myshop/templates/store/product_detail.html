@@ -41,13 +41,14 @@
                 </div>
                 <div class="card-body">
                     <h2 class="text-center">{{ product.name }}</h2>
-                    <p class="price text-center">Цена: {{ product.price }} тенге</p>
-                    <p class="description text-center">{{ product.description }}</p>
+                    <h2 class="price text-center">Цена: {{ product.price }} тенге</h2>
+                    <pre style="white-space: pre-wrap;">{{ product.description }}</pre>
                     <div class="text-center">
                         <a href="{% url 'store:add-to-cart' product.id %}" class="btn btn-secondary mt-3">Купить</a><br>
                         <a href="{% url 'store:product_list' %}" class="btn btn-secondary mt-3">Вернуться за покупками</a>
                     </div>
                 </div>
+                
             </div>
         </div>
     </main>
