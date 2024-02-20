@@ -98,11 +98,11 @@
         <!-- Добавим форму поиска -->
         
         <h1 class="mt-3">Каталог товаров</h1>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-2">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-1">
             {% if products %}
                 {% for product in products %}
-                    <div class="col mb-4">
-                        <div class="card rounded-3 shadow-sm product-container">
+                    <div class="col mb-3">
+                        <div class="card rounded-4 shadow-sm product-container">
                             <div class="card-header" style="background-color: white;">
                                 {% if product.img %}
                                     <img class="rounded mx-auto d-block product-img" src="{{ product.img }}" width="100px" height="100px">
@@ -117,12 +117,13 @@
                                 {% if product.total > 0 %}
                                     <h4>Осталось {{ product.total }} шт</h4>
                                 {% endif %}
+                                <a href="{% url 'store:product_detail' product.id %}" class="btn btn-secondary mt-2">Подробнее</a>
                                 <form id="add-to-cart-form" method="post" action="{% url 'store:add-to-cart' product.id %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="product_id" value="{{ product.id }}">
                                     <button type="submit" class="btn btn-secondary mt-1 add-to-cart-button">Купить</button>
                                 </form>
-                                <a href="{% url 'store:product_detail' product.id %}" class="btn btn-secondary mt-2">Подробнее</a>
+                                
                                 
                             </div>
                             
@@ -137,22 +138,40 @@
                 </ul>
             {% endif %}
         </div>
-        <div class="pagination">
-            <span class="step-links">
+        <div class="pagination justify-content-center">
+            <ul class="pagination">
                 {% if products.has_previous %}
-                    <a href="?page=1">&laquo; первая</a>
-                    <a href="?page={{ products.previous_page_number }}">предыдущая</a>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Первая">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Первая</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Предыдущая">
+                            <span aria-hidden="true">Предыдущая</span>
+                            <span class="sr-only">Предыдущая</span>
+                        </a>
+                    </li>
                 {% endif %}
-        
-                <span class="current">
-                    Страница {{ products.number }} из {{ products.paginator.num_pages }}.
-                </span>
-        
+                <li class="page-item disabled">
+                    <span class="page-link">Страница {{ products.number }} из {{ products.paginator.num_pages }}.</span>
+                </li>
                 {% if products.has_next %}
-                    <a href="?page={{ products.next_page_number }}">следующая</a>
-                    <a href="?page={{ products.paginator.num_pages }}">последняя &raquo;</a>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Следующая">
+                            <span aria-hidden="true">Следующая</span>
+                            <span class="sr-only">Следующая</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.paginator.num_pages }}" aria-label="Последняя">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Последняя</span>
+                        </a>
+                    </li>
                 {% endif %}
-            </span>
+            </ul>
         </div>
     </main>
 {% endblock %}
