@@ -40,13 +40,15 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <h2 class="text-center">{{ product.name }}</h2>
-                    <h2 class="price text-center">Цена: {{ product.price }} тенге</h2>
-                    <pre style="white-space: pre-wrap;">{{ product.description }}</pre>
-                    <div class="text-center">
+                    <h2 >{{ product.name }}</h2>
+                    <h2 >Цена: {{ product.price }} ₸</h2>
+                    <div >
                         <a href="{% url 'store:add-to-cart' product.id %}" class="btn btn-secondary mt-3">Купить</a><br>
                         <a href="{% url 'store:product_list' %}" class="btn btn-secondary mt-3">Вернуться за покупками</a>
                     </div>
+                    <h3>Описание:</h3>
+                    <pre style="white-space: pre-wrap;">{{ product.description }}</pre>
+                    
                 </div>
                 
             </div>
