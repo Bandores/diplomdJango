@@ -45,7 +45,7 @@ def buy_single_product(request, product_id):
                         cart_item.save()
 
                     messages.success(request, 'Продукт успешно куплен!')
-                    return redirect('store:cart')
+                    return redirect('store:user_orders')
                 else:
                     messages.error(request, 'Извините, этот товар закончился на складе!')
             else:
@@ -94,11 +94,11 @@ def buy_all_products(request):
                 else:
                     messages.success(request, 'Все продукты успешно куплены!')
 
-            return render(request, 'store/order_form.html', {'form': form, 'insufficient_products': insufficient_products})
+            return render(request, 'store:user_orders', {'form': form, 'insufficient_products': insufficient_products})
     else:
         form = OrderForm()
 
-    return render(request, 'store/order_form.html', {'form': form})
+    return render(request, 'store:user_orders', {'form': form})
 
 @require_POST
 @login_required(login_url='/users/login/')

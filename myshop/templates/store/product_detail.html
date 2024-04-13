@@ -25,6 +25,9 @@
         button {
             padding: 5px 10px;
         }
+        .product-description {
+            
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -47,7 +50,8 @@
                         <a href="{% url 'store:product_list' %}" class="btn btn-secondary mt-3">Вернуться за покупками</a>
                     </div>
                     <h3>Описание:</h3>
-                    <pre style="white-space: pre-wrap;">{{ product.description }}</pre>
+                    <div class="product-description"><pre style="white-space: pre-wrap;font-size: 20px">{{ product.description }}</pre></div>
+                    
                     
                 </div>
                 
